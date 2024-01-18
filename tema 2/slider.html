@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Slider</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="slider">
+      <img src="monaLisa.jpg" class="slide" style="display: block" />
+      <img src="Starry Night.jpg" class="slide" />
+      <img src="Rembrandt.jpeg" class="slide" />
+
+      <button class="prev" onclick="changeSlide(-1)">Previous</button>
+      <button class="next" onclick="changeSlide(1)">Next</button>
+    </div>
+
+    <script>
+      let slideIndex = 0;
+      showSlide(slideIndex);
+
+      function changeSlide(n) {
+        showSlide((slideIndex += n));
+      }
+
+      function showSlide(n) {
+        let i;
+        const slides = document.getElementsByClassName("slide");
+        if (n >= slides.length) {
+          slideIndex = 0;
+        }
+        if (n < 0) {
+          slideIndex = slides.length - 1;
+        }
+
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+        slides[slideIndex].style.display = "block";
+      }
+
+      setInterval(function () {
+        changeSlide(1);
+      }, 10000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Registration Form</title>
+    <script src="form-validation.js"></script>
+  </head>
+  <body>
+    <form id="registrationForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" />
+      <div id="emailError" style="color: red"></div>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" />
+      <div id="passwordError" style="color: red"></div>
+
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" />
+      <div id="confirmPasswordError" style="color: red"></div>
+
+      <button type="button" onclick="validateForm()">Register</button>
+    </form>
+
+    <script>
+      function validateForm() {
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+
+        var emailValid = validateEmail(email);
+        var passwordValid = validatePassword(password);
+        var passwordsMatch = confirmPassword === password;
+
+        document.getElementById("emailError").textContent = emailValid
+          ? ""
+          : "Invalid email format";
+        document.getElementById("passwordError").textContent = passwordValid
+          ? ""
+          : "Password must be at least 8 characters long, with uppercase, lowercase, number, and special character";
+        document.getElementById("confirmPasswordError").textContent =
+          passwordsMatch ? "" : "Passwords do not match";
+
+        if (emailValid && passwordValid && passwordsMatch) {
+          // Submit the form or further processing
+          alert("Form is valid!");
+        } else {
+          alert("Form is invalid. Please correct the errors and try again.");
+        }
+      }
+
+      function validateEmail(email) {
+        var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return regex.test(email);
+      }
+
+      function validatePassword(password) {
+        var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+        return regex.test(password);
+      }
+    </script>
+  </body>
+</html>

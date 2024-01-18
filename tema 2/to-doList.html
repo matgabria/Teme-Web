@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="todo-app">
+      <input type="text" id="new-task" placeholder="Add a new task..." />
+      <button onclick="addTask()">Add Task</button>
+      <ul id="task-list"></ul>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        loadTasks();
+      });
+
+      function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        for (const task of tasks) {
+          addTaskToDOM(task);
+        }
+      }
+
+      function addTask() {
+        const taskInput = document.getElementById("new-task");
+        const task = { text: taskInput.value, completed: false };
+        addTaskToDOM(task);
+        saveTask(task);
+        taskInput.value = "";
+      }
+
+      function saveTask(task) {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks.push(task);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      function addTaskToDOM(task) {
+        const list = document.getElementById("task-list");
+        const li = document.createElement("li");
+        li.className = "task";
+        li.innerHTML = `
+        <input type="checkbox" ${
+          task.completed ? "checked" : ""
+        } onchange="toggleTask(this)">
+        <span ${task.completed ? 'class="completed"' : ""}>${task.text}</span>
+        <button onclick="deleteTask(this)">Delete</button>
+        <button onclick="editTask(this)">Edit</button>
+    `;
+        list.appendChild(li);
+      }
+
+      function deleteTask(button) {
+        const li = button.parentNode;
+        li.parentNode.removeChild(li);
+        updateLocalStorage();
+      }
+
+      function editTask(button) {
+        const li = button.parentNode;
+        const span = li.querySelector("span");
+        const newText = prompt("Edit the task", span.textContent);
+        if (newText) {
+          span.textContent = newText;
+          updateLocalStorage();
+        }
+      }
+
+      function toggleTask(checkbox) {
+        const li = checkbox.parentNode;
+        const span = li.querySelector("span");
+        span.classList.toggle("completed");
+        updateLocalStorage();
+      }
+
+      function updateLocalStorage() {
+        const tasks = [];
+        document.querySelectorAll("#task-list .task").forEach((taskLi) => {
+          tasks.push({
+            text: taskLi.querySelector("span").textContent,
+            completed: taskLi.querySelector("input").checked,
+          });
+        });
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+    </script>
+  </body>
+</html>
