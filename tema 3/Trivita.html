@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trivia Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="trivia-game">
+      <div id="question"></div>
+      <div id="options"></div>
+      <button id="next-question" onclick="nextQuestion()">Next Question</button>
+      <div id="score"></div>
+    </div>
+
+    <script>
+      let currentQuestionIndex = 0;
+      let score = 0;
+      const questions = [
+        {
+          question: "What is the capital of France?",
+          options: ["Paris", "Berlin", "Rome", "Madrid"],
+          answer: "Paris",
+        },
+        {
+          question: "What is the largest planet in our Solar System?",
+          options: ["Earth", "Jupiter", "Saturn", "Mars"],
+          answer: "Jupiter",
+        },
+      ];
+
+      function displayQuestion() {
+        const question = questions[currentQuestionIndex];
+        document.getElementById("question").textContent = question.question;
+        const optionsContainer = document.getElementById("options");
+        optionsContainer.innerHTML = "";
+        question.options.forEach((option) => {
+          const button = document.createElement("button");
+          button.textContent = option;
+          button.className = "option";
+          button.onclick = () => selectOption(option);
+          optionsContainer.appendChild(button);
+        });
+      }
+
+      function selectOption(option) {
+        const question = questions[currentQuestionIndex];
+        if (option === question.answer) {
+          score++;
+        }
+        document.getElementById("score").textContent = `Score: ${score}`;
+        document.getElementById("next-question").style.display = "block";
+      }
+
+      function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+          displayQuestion();
+        } else {
+          document.getElementById(
+            "trivia-game"
+          ).innerHTML = `<h1>Game Over</h1><p>Your score: ${score}</p>`;
+        }
+        document.getElementById("next-question").style.display = "none";
+      }
+
+      displayQuestion();
+    </script>
+  </body>
+</html>
